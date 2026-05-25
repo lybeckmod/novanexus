@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>NovaNexus - Tam Entegre Arşiv</title>
+    <style>
+        body { background-color: #050508; color: white; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        h1 { text-align: center; color: #66fcf1; letter-spacing: 5px; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 30px; }
+        .star-card { background: #0a0b1e; border: 1px solid #4f46e5; border-radius: 20px; overflow: hidden; }
+        .star-card img { width: 100%; height: 250px; object-fit: cover; }
+        .content { padding: 20px; }
+        h2 { color: #66fcf1; margin-top: 0; }
+        .meta-table { width: 100%; font-size: 0.9rem; margin-bottom: 15px; }
+        .meta-table td { padding: 5px 0; border-bottom: 1px solid #1a1a3a; }
+        .section-title { color: #66fcf1; font-weight: bold; margin-top: 15px; display: block; border-left: 3px solid #66fcf1; padding-left: 10px; }
+        .desc-text { font-size: 0.9rem; line-height: 1.6; color: #cbd5e1; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>NOVANEXUS ARCHIVE</h1>
+    <div class="container" id="starsContainer"></div>
+
+    <script>
+        // Veritabanı (Buraya 50 yıldızın hepsini ekleyebilirsin)
+        const starsDatabase = [
+            { name: "Güneş", img: "yildizlar/güneş.jfif", const: "Samanyolu", type: "Sarı Cüce", dist: "0 Işık Yılı", story: "Antik Mısır'da Ra, Yunan'da Helios olarak tanrılaştırıldı.", discovery: "Antik çağlardan beri biliniyor.", meaning: "Yaşamın temel enerji kaynağı." },
+            { name: "Sirius A", img: "yildizlar/sirius.jfif", const: "Büyük Köpek", type: "Mavi-Beyaz", dist: "8.6 Işık Yılı", story: "Mısır'da Sothis, Nil'in taşmasını haber veren yıldızdı.", discovery: "Antik dönemlerden beri biliniyor.", meaning: "Yenilenme ve bereket sembolü." },
+            { name: "Betelgeuse", img: "yildizlar/betelgeuse.jfif", const: "Avcı", type: "Kırmızı Süperdev", dist: "640 Işık Yılı", story: "Arapça 'Devin Koltuğu' anlamına gelir.", discovery: "1921'de çapı ölçülen ilk yıldız oldu.", meaning: "Yaşamın kırılganlığı ve dönüşüm." },
+            { name: "Vega", img: "yildizlar/vega.jfif", const: "Çalgı", type: "Beyaz Ana Kol", dist: "25 Işık Yılı", story: "Arapça 'Düşen Kartal' anlamındadır.", discovery: "1850'de ilk fotoğraflanan yıldızlardan.", meaning: "Geleceğin kutup yıldızı." },
+            { name: "Antares", img: "yildizlar/antares.jfif", const: "Akrep", type: "Kırmızı Süperdev", dist: "550 Işık Yılı", story: "Mars'ın rakibi (Anti-Ares) olarak adlandırıldı.", discovery: "Ptolemy tarafından kataloglandı.", meaning: "Savaş ve rekabet sembolü." },
+            { name: "Polaris", img: "yildizlar/polaris.jfif", const: "Küçük Ayı", type: "Sarı Süperdev", dist: "433 Işık Yılı", story: "Denizcilerin pusulası, kutsal yol gösterici.", discovery: "Antik çağdan beri biliniyor.", meaning: "Sadakat ve doğru yön." },
+            { name: "Rigel", img: "yildizlar/rigel.jfif", const: "Avcı", type: "Mavi Süperdev", dist: "860 Işık Yılı", story: "Avcı'nın sol ayağını temsil eder.", discovery: "İslam altın çağı astronomları inceledi.", meaning: "Güç ve uzak ihtişam." },
+            { name: "Aldebaran", img: "yildizlar/aldebaran.jfif", const: "Boğa", type: "Turuncu Dev", dist: "65 Işık Yılı", story: "Ülker kümesini takip ettiği için 'Takipçi' denir.", discovery: "Boğa'nın gözü olarak tanımlandı.", meaning: "Sabır ve gözlem." },
+            { name: "Proxima Centauri", img: "yildizlar/proximac.jfif", const: "Erboğa", type: "Kırmızı Cüce", dist: "4.24 Işık Yılı", story: "Güneş'e en yakın komşumuz olduğu için 'Yakın' denmiştir.", discovery: "1915'te Robert Innes keşfetti.", meaning: "Bilinmeyene atılan ilk adım." },
+            { name: "VY Canis Majoris", img: "yildizlar/vycanis.jfif", const: "Büyük Köpek", type: "Kırmızı Hiperdev", dist: "3900 Işık Yılı", story: "Devasa boyutuyla evrenin uçsuzluğunu kanıtlar.", discovery: "1801'de Jerome Lalande katalogladı.", meaning: "Sınırların ötesi." },
+            { name: "Capella", img: "yildizlar/capella.jfif", const: "Arabacı", type: "Sarı Dev Sistemi", dist: "42.8 Işık Yılı", story: "Zeus'u besleyen keçi mitolojisiyle anılır.", discovery: "Antik Mısır kayıtlarında yer alır.", meaning: "Besleme ve koruma." },
+            { name: "Arcturus", img: "yildizlar/arcturus.jfif", const: "Çoban", type: "Turuncu Dev", dist: "36.7 Işık Yılı", story: "Ayı Muhafızı olarak bilinir.", discovery: "Antik Yunanlılar tanımladı.", meaning: "Koruyuculuk ve nöbet." }
+        ];
+
+        const container = document.getElementById('starsContainer');
+        starsDatabase.forEach(s => {
+            container.innerHTML += `
+                <div class="star-card">
+                    <img src="${s.img}" alt="${s.name}" onerror="this.style.display='none'">
+                    <div class="content">
+                        <h2>${s.name}</h2>
+                        <table class="meta-table">
+                            <tr><td>Takımyıldızı:</td><td>${s.const}</td></tr>
+                            <tr><td>Tür:</td><td>${s.type}</td></tr>
+                            <tr><td>Uzaklık:</td><td>${s.dist}</td></tr>
+                        </table>
+                        <span class="section-title">Mitolojik Kökeni</span>
+                        <div class="desc-text">${s.story}</div>
+                        <span class="section-title">Keşif Tarihçesi</span>
+                        <div class="desc-text">${s.discovery}</div>
+                        <span class="section-title">Sembolik Anlamı</span>
+                        <div class="desc-text">${s.meaning}</div>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
